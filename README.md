@@ -97,3 +97,4 @@ npm run dev
 
 MIT License. See `LICENSE` for details.
 # starter-project
+# inventory-management
