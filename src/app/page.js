@@ -1,100 +1,128 @@
-import Image from "next/image";
+"use client";
+import {
+  Grid,
+  Lock,
+  Mail,
+  MailCheck,
+  Navigation,
+  UserPlus,
+} from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
+      {/* Navigation Bar */}
+      <nav className="bg-blue-600 text-white p-4 shadow-md">
+        <div className="max-w-screen-xl mx-auto flex items-center justify-between">
+          <a href="/" className="text-xl font-bold">
+            Starter Project
           </a>
         </div>
+      </nav>
+
+      {/* Main Content */}
+      <main className="text-center py-16">
+        <div className="max-w-screen-lg mx-auto px-4">
+          <h1 className="text-4xl font-bold mb-6">
+            Welcome to the Starter Project
+          </h1>
+          <p className="text-lg mb-12">
+            This project showcases a range of features like authentication
+            (login, signup, password reset), a responsive dashboard, and more!
+            Below, you can explore the main features of the project.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Feature 1: Login */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+              <MailCheck className="mx-auto mb-4 text-4xl text-blue-600" />
+              <h2 className="text-xl font-semibold mb-2">Login</h2>
+              <p>
+                Users can log in securely to access their personal dashboard.
+                The login flow includes email and password authentication.
+              </p>
+            </div>
+
+            {/* Feature 2: Signup */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+              <UserPlus className="mx-auto mb-4 text-4xl text-green-600" />
+              <h2 className="text-xl font-semibold mb-2">Signup</h2>
+              <p>
+                New users can sign up by creating an account with their email
+                and password. The signup form is simple and user-friendly.
+              </p>
+            </div>
+
+            {/* Feature 3: Password Reset */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+              <Lock className="mx-auto mb-4 text-4xl text-yellow-600" />
+              <h2 className="text-xl font-semibold mb-2">Reset Password</h2>
+              <p>
+                Users who forget their password can easily reset it via a secure
+                email verification process.
+              </p>
+            </div>
+
+            {/* Feature 4: Email Verification */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+              <Mail className="mx-auto mb-4 text-4xl text-purple-600" />
+              <h2 className="text-xl font-semibold mb-2">Email Verification</h2>
+              <p>
+                A verification email is sent to users during signup to ensure
+                account authenticity and security.
+              </p>
+            </div>
+
+            {/* Feature 5: Dashboard */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+              <Grid className="mx-auto mb-4 text-4xl text-teal-600" />
+              <h2 className="text-xl font-semibold mb-2">
+                Responsive Dashboard
+              </h2>
+              <p>
+                Once logged in, users are presented with a responsive dashboard
+                to manage their account settings and profile information.
+              </p>
+            </div>
+
+            {/* Feature 6: Navigation & Footer */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+              <Navigation className="mx-auto mb-4 text-4xl text-orange-600" />
+              <h2 className="text-xl font-semibold mb-2">
+                Navigation & Footer
+              </h2>
+              <p>
+                The project includes a well-structured navigation bar and
+                footer, making it easy to navigate between pages.
+              </p>
+            </div>
+          </div>
+
+          {/* Call to Action */}
+          <div className="mt-12">
+            <h3 className="text-2xl font-semibold mb-4">Try It Yourself!</h3>
+            <p className="text-lg mb-6">
+              Explore the demo of the Starter Project by signing up and logging
+              in. See the functionality in action.
+            </p>
+            <button
+              onClick={() => (window.location.href = "/signup")}
+              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-md text-xl"
+            >
+              Get Started
+            </button>
+          </div>
+        </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Footer */}
+      <footer className="bg-blue-600 text-white p-4 mt-8">
+        <div className="max-w-screen-xl mx-auto text-center">
+          <p>
+            &copy; {new Date().getFullYear()} Starter Project. All rights
+            reserved.
+          </p>
+        </div>
       </footer>
     </div>
   );

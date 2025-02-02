@@ -1,7 +1,7 @@
 "use client";
 import { auth, db } from "@/lib/firebase";
 import { applyActionCode } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -15,61 +15,61 @@ export default function VerifyEmail() {
   useEffect(() => {
     const verifyEmail = async () => {
       try {
-        // Get the action code from the URL
         const oobCode = searchParams.get("oobCode");
         const continueUrl = searchParams.get("continueUrl");
 
-        if (!oobCode) {
-          throw new Error("No verification code provided");
+        console.log("oobCode:", oobCode); // Debugging
+        console.log("continueUrl:", continueUrl); // Debugging
+
+        if (!oobCode || !continueUrl) {
+          throw new Error(
+            "Invalid verification link. Please check the link and try again."
+          );
         }
 
-        // Apply the action code
+        // Extract uid from continueUrl
+        const continueUrlParams = new URLSearchParams(
+          new URL(continueUrl).search
+        );
+        const uid = continueUrlParams.get("uid");
+
+        console.log("uid:", uid); // Debugging
+
+        if (!uid) {
+          throw new Error("User ID not found in the verification link.");
+        }
+
+        // 1. Apply the verification code
         await applyActionCode(auth, oobCode);
 
-        // Get user data from sessionStorage
-        const tempUserData = JSON.parse(sessionStorage.getItem("tempUserData"));
+        // 2. Update user document in Firestore
+        const userRef = doc(db, "users", uid);
+        await updateDoc(userRef, {
+          emailVerified: true,
+          updatedAt: serverTimestamp(),
+        });
 
-        if (tempUserData) {
-          // Save user data to Firestore
-          await setDoc(doc(db, "users", tempUserData.uid), {
-            name: tempUserData.name,
-            email: tempUserData.email,
-            uid: tempUserData.uid,
-            emailVerified: true,
-            createdAt: new Date().toISOString(),
-          });
-
-          // Clear temporary data
-          sessionStorage.removeItem("tempUserData");
-        }
-
+        // 3. Show success message
         await Swal.fire({
           title: "Email Verified!",
           text: "Your email has been verified successfully. You can now log in.",
           icon: "success",
-          confirmButtonText: "Continue to Login",
           confirmButtonColor: "#3B82F6",
-          customClass: {
-            popup: "rounded-2xl",
-            confirmButton: "px-6 py-2 rounded-xl",
-          },
+          confirmButtonText: "Continue to Login",
         });
 
-        // Redirect to login page
-        router.push("/auth/login");
+        router.push("/dashboard");
       } catch (error) {
         console.error("Verification error:", error);
 
         await Swal.fire({
           title: "Verification Failed",
-          text: "The verification link may have expired or is invalid. Please try signing up again.",
+          text:
+            error.message ||
+            "The verification link may have expired or is invalid. Please request a new verification email.",
           icon: "error",
+          confirmButtonColor: "#EF4444",
           confirmButtonText: "Back to Sign Up",
-          confirmButtonColor: "#3B82F6",
-          customClass: {
-            popup: "rounded-2xl",
-            confirmButton: "px-6 py-2 rounded-xl",
-          },
         });
 
         router.push("/auth/signup");
@@ -81,23 +81,21 @@ export default function VerifyEmail() {
     verifyEmail();
   }, [router, searchParams]);
 
-  if (verifying) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-        <div className="relative bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-gray-100 max-w-md w-full mx-4">
-          <div className="text-center">
-            <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-gray-900">
-              Verifying your email...
-            </h2>
-            <p className="text-gray-600 mt-2">
-              Please wait while we verify your email address.
-            </p>
-          </div>
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <div className="relative bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-gray-100 max-w-md w-full mx-4">
+        <div className="text-center">
+          <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-900">
+            {verifying ? "Verifying your email..." : "Verification complete"}
+          </h2>
+          <p className="text-gray-600 mt-2">
+            {verifying
+              ? "Please wait while we verify your email address."
+              : "Redirecting you..."}
+          </p>
         </div>
       </div>
-    );
-  }
-
-  return null;
+    </div>
+  );
 }
